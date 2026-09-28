@@ -1,0 +1,60 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: hospital-management
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/hospital_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    username: root
+    password: "root123"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+  
+  # h2:
+  #   console:
+  #     enabled: true
+  #     path: /h2-console
+  #     settings:
+  #       web-allow-others: true
+        
+  security:
+    jwt:
+      secret: hospitalManagementSecretKeyForSecureAuthentication2025
+      expiration: 86400000 # 24 hours in milliseconds
+      
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+      
+file:
+  upload-dir: ./uploads/medical-documents
+
+logging:
+  level:
+    com.hospital.management: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

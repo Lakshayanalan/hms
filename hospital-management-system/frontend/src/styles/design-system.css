@@ -1,0 +1,112 @@
+/*
+ * HealthCore Design System — utility classes and animation keyframes.
+ * Color/radius/shadow/transition values are NOT hardcoded here — they are
+ * mirrored onto :root at runtime from theme/tokens.js by theme/cssVariables.js,
+ * so this file and the MUI theme (modernTheme.js) never drift apart.
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== TEXT UTILITIES ===== */
+.text-primary { color: var(--color-primary-500); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-error { color: var(--color-error-main); }
+.text-warning { color: var(--color-warning-main); }
+.text-info { color: var(--color-info-main); }
+
+/* ===== BACKGROUND UTILITIES ===== */
+.bg-primary { background-color: var(--color-primary-500); }
+.bg-surface { background-color: var(--color-surface); }
+.bg-error { background-color: var(--color-error-main); }
+.bg-warning { background-color: var(--color-warning-main); }
+
+/* ===== SHADOW UTILITIES ===== */
+.shadow-xs { box-shadow: var(--shadow-xs); }
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+.shadow-xl { box-shadow: var(--shadow-xl); }
+
+/* ===== BORDER RADIUS UTILITIES ===== */
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-xl { border-radius: var(--radius-xl); }
+.rounded-full { border-radius: var(--radius-full); }
+
+/* ===== GLASS UTILITY =====
+ * "Liquid glass" surface — applied selectively to chrome (buttons, nav,
+ * modal/dropdown backdrops, toasts), never to dense/scrolling data
+ * surfaces. See theme/tokens.js `glass` for the source values.
+ */
+.glass {
+  background-color: var(--glass-surface);
+  background-image: var(--glass-highlight);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+/* ===== ANIMATIONS =====
+ * CSS keyframes for simple cases (kept for non-React-driven markup);
+ * Framer Motion (src/motion/variants.js) owns authored component animation.
+ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-fadeIn { animation: fadeIn var(--transition-base); }
+.animate-slideUp { animation: slideUp var(--transition-base); }
+.animate-slideDown { animation: slideDown var(--transition-base); }
+.animate-scaleIn { animation: scaleIn var(--transition-base); }
+.animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeIn, .animate-slideUp, .animate-slideDown, .animate-scaleIn, .animate-pulse {
+    animation: none;
+  }
+
+  /* Blanket safety net for MUI's own internal CSS transitions (ripple,
+     hover, etc.) — Framer Motion variants already self-check via
+     theme/tokens.js's prefersReducedMotion(). */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
